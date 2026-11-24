@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RSVP | Papua Montessori Academy</title>
+  <meta name="description" content="Konfirmasi kehadiran Grand Opening Papua Montessori Academy">
+  <style>
+    :root {
+      --ink: #3f332b;
+      --muted: #81756c;
+      --gold: #a88955;
+      --gold-dark: #80663d;
+      --paper: #fbf8f2;
+      --line: #e7dfd2;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 28px 16px;
+      color: var(--ink);
+      background: transparent;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    .wrap { width: 100%; max-width: 560px; margin: 0 auto; }
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: clamp(22px, 5vw, 42px);
+      box-shadow: 0 12px 36px rgba(63, 51, 43, .07);
+    }
+    .eyebrow {
+      color: var(--gold-dark); font: 600 10px/1.5 Arial, sans-serif;
+      letter-spacing: .24em; text-align: center; text-transform: uppercase;
+    }
+    h1 {
+      margin: 10px 0 8px; text-align: center; font-weight: 400;
+      font-size: clamp(27px, 6vw, 38px); line-height: 1.12;
+    }
+    .intro {
+      margin: 0 auto 28px; max-width: 390px; text-align: center;
+      color: var(--muted); font: 13px/1.7 Arial, sans-serif;
+    }
+    .ornament { width: 58px; height: 1px; background: var(--gold); margin: 18px auto 24px; }
+    label {
+      display: block; margin: 17px 0 7px;
+      color: var(--ink); font: 600 11px/1.4 Arial, sans-serif;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    input, select, textarea {
+      display: block; width: 100%; border: 1px solid var(--line);
+      border-radius: 0; padding: 13px 14px; background: #fff;
+      color: var(--ink); font: 14px Arial, sans-serif; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+    textarea { min-height: 88px; resize: vertical; }
+    .hint { margin: 6px 0 0; color: var(--muted); font: 11px/1.5 Arial, sans-serif; }
+    button {
+      width: 100%; margin-top: 24px; padding: 15px 18px;
+      border: 1px solid var(--gold-dark); background: var(--gold-dark);
+      color: white; cursor: pointer; font: 600 11px Arial, sans-serif;
+      letter-spacing: .16em; text-transform: uppercase;
+    }
+    button:hover { background: #6f5835; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .status { display: none; margin-top: 16px; padding: 12px; font: 12px/1.6 Arial, sans-serif; }
+    .status.show { display: block; }
+    .status.info { background: #f1eadc; color: #5f4b2f; }
+    .status.error { background: #f8e9e6; color: #8a3328; }
+    .footer { margin-top: 22px; text-align: center; color: var(--muted); font: 10px Arial, sans-serif; letter-spacing: .08em; }
+    .hidden { position: absolute; left: -5000px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="eyebrow">Papua Montessori Academy</div>
+      <h1>Kindly RSVP</h1>
+      <div class="ornament"></div>
+      <p class="intro">Dengan hormat, kami mengundang Anda untuk hadir dalam perayaan Grand Opening Papua Montessori Academy. Mohon konfirmasikan kehadiran Anda melalui formulir berikut.</p>
+
+      <form id="rsvpForm">
+        <label for="guestName">Nama lengkap</label>
+        <input id="guestName" name="guestName" type="text" autocomplete="name" maxlength="120" placeholder="Masukkan nama lengkap" required>
+
+        <label for="whatsapp">Nomor WhatsApp</label>
+        <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" maxlength="25" placeholder="Contoh: 62812xxxxxxxx" required>
+        <p class="hint">Gunakan kode negara, misalnya 62 untuk Indonesia.</p>
+
+        <label for="attendance">Konfirmasi kehadiran</label>
+        <select id="attendance" name="attendance" required>
+          <option value="">Pilih konfirmasi</option>
+          <option value="Hadir">Dengan senang hati, saya akan hadir</option>
+          <option value="Tidak Hadir">Mohon maaf, saya tidak dapat hadir</option>
+        </select>
+
+        <div id="guestCountWrap">
+          <label for="guestCount">Jumlah orang yang hadir</label>
+          <select id="guestCount" name="guestCount">
+            <option value="1">1 orang</option>
+            <option value="2">2 orang</option>
+            <option value="3">3 orang</option>
+            <option value="4">4 orang</option>
+            <option value="5">5 orang</option>
+            <option value="6">6 orang</option>
+          </select>
+        </div>
+
+        <label for="message">Pesan atau ucapan <span style="font-weight:400;text-transform:none">(opsional)</span></label>
+        <textarea id="message" name="message" maxlength="500" placeholder="Tuliskan pesan singkat Anda"></textarea>
+
+        <!-- Honeypot anti-spam: keep this field hidden and unchanged -->
+        <input class="hidden" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <button id="submitBtn" type="submit">Kirim Konfirmasi</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </form>
+      <div class="footer">WE LOOK FORWARD TO WELCOMING YOU</div>
+    </section>
+  </main>
+
+  <script>
+    // GANTI dengan URL Web App Google Apps Script setelah deployment.
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4iSl1ILrO-s_XanN3-tsNgK5SScVu5xUuvTFaJtRQY5p6PC0mpH43F-HL_JVQOgySWQ/exec";
+
+    const form = document.getElementById("rsvpForm");
+    const attendance = document.getElementById("attendance");
+    const guestCountWrap = document.getElementById("guestCountWrap");
+    const guestCount = document.getElementById("guestCount");
+    const statusBox = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function updateAttendanceFields() {
+      const attending = attendance.value === "Hadir";
+      guestCountWrap.style.display = attending ? "block" : "none";
+      guestCount.required = attending;
+      if (!attending) guestCount.value = "0";
+      else if (guestCount.value === "0") guestCount.value = "1";
+    }
+    attendance.addEventListener("change", updateAttendanceFields);
+    updateAttendanceFields();
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = "status show " + type;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (SCRIPT_URL.includes("PASTE_YOUR_")) {
+        showStatus("Form belum terhubung. Masukkan URL Web App Google Apps Script pada bagian SCRIPT_URL.", "error");
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      if (data.website) return; // likely spam
+      data.guestCount = data.attendance === "Hadir" ? Number(data.guestCount) : 0;
+      data.source = "Canva RSVP";
+      data.submittedAtClient = new Date().toISOString();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Mengirim...";
+      showStatus("Sedang mengirim konfirmasi Anda…", "info");
+
+      try {
+        // Apps Script web apps commonly redirect responses. no-cors sends the
+        // form data but intentionally does not expose a readable response here.
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: new URLSearchParams(data).toString()
+        });
+
+        showStatus("Permintaan RSVP telah dikirim. Terima kasih! Jika ingin memastikan data tercatat, penyelenggara dapat memeriksa Google Sheets.", "info");
+        form.reset();
+        updateAttendanceFields();
+      } catch (error) {
+        showStatus("Pengiriman tidak berhasil. Periksa koneksi internet dan coba kembali.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Kirim Konfirmasi";
+      }
+    });
+  </script>
+</body>
+</html>
